@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'my-app'
         IMAGE_TAG = 'v1.0.0'
-        VENV_PATH = 'myenv'  // Adjust if your venv path is different
+        VENV_PATH = 'venv'
     }
 
     stages {
@@ -14,22 +14,31 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Setup Python Environment') {
             steps {
-                echo "Running tests"
                 sh '''
-                   source ${VENV_PATH}/bin/activate
-                   pytest -v test_app.py
+                python3 -m venv $VENV_PATH
+                source $VENV_PATH/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
                 '''
             }
         }
 
-        stage('Build') {
+        stage('Test') {
             steps {
-                echo "Building Docker image"
                 sh '''
-                   source ${VENV_PATH}/bin/activate
-                   python docker_build.py
+                source $VENV_PATH/bin/activate
+                pytest -v test_app.py
+                '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                source $VENV_PATH/bin/activate
+                python docker_build.py
                 '''
             }
         }
@@ -42,39 +51,8 @@ pipeline {
             }
         }
 
-        stage('Push') {
+        stage('Push Docker Image') {
             steps {
-                echo "Pushing Docker image"
                 sh '''
-                   source ${VENV_PATH}/bin/activate
-                   python docker_push.py
-                '''
-            }
-        }
-
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo "Deploying"
-                sh '''
-                   source ${VENV_PATH}/bin/activate
-                   python deploy.py
-                '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Pipeline succeeded!"
-        }
-        failure {
-            echo "Pipeline failed!"
-        }
-        always {
-            cleanWs()
-        }
-    }
-}
+                source $VENV_PATH/bin/activate
+                python docker
