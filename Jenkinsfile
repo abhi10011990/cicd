@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'my-app'
+        IMAGE_NAME = 'your-dockerhub-username/my-app'  // <-- Replace this
         IMAGE_TAG = 'v1.0.0'
     }
 
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                    python docker_build.py
+                    IMAGE_NAME=$IMAGE_NAME IMAGE_TAG=$IMAGE_TAG python docker_build.py
                 '''
             }
         }
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                    python docker_push.py
+                    IMAGE_NAME=$IMAGE_NAME IMAGE_TAG=$IMAGE_TAG python docker_push.py
                 '''
             }
         }
