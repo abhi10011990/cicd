@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'my-app'
         IMAGE_TAG = 'v1.0.0'
+        VENV_PATH = 'myenv'  // Adjust if your venv path is different
     }
 
     stages {
@@ -16,14 +17,20 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running tests"
-                sh 'pytest -v test_app.py'
+                sh '''
+                   source ${VENV_PATH}/bin/activate
+                   pytest -v test_app.py
+                '''
             }
         }
 
         stage('Build') {
             steps {
                 echo "Building Docker image"
-                sh 'python docker_build.py'
+                sh '''
+                   source ${VENV_PATH}/bin/activate
+                   python docker_build.py
+                '''
             }
         }
 
@@ -38,7 +45,10 @@ pipeline {
         stage('Push') {
             steps {
                 echo "Pushing Docker image"
-                sh 'python docker_push.py'
+                sh '''
+                   source ${VENV_PATH}/bin/activate
+                   python docker_push.py
+                '''
             }
         }
 
@@ -48,7 +58,10 @@ pipeline {
             }
             steps {
                 echo "Deploying"
-                sh 'python deploy.py'
+                sh '''
+                   source ${VENV_PATH}/bin/activate
+                   python deploy.py
+                '''
             }
         }
     }
