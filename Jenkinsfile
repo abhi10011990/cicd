@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'your-dockerhub-username/my-app'  // <-- Replace this
+        IMAGE_NAME = 'abhi20242024/my-app'  // <-- Replace this
         IMAGE_TAG = 'v1.0.0'
     }
 
