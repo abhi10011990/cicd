@@ -1,7 +1,7 @@
 import docker
 import sys
 
-def push_docker_image(image_name='my-app', tag='latest'):
+def push_docker_image(image_name='abhi20242024/my-app', tag='v1.0.0'):
     try:
         client = docker.from_env()
         print(f"⬆️ Pushing Docker image: {image_name}:{tag}")
@@ -23,4 +23,4 @@ def push_docker_image(image_name='my-app', tag='latest'):
         sys.exit(1)
 
 if __name__ == "__main__":
-    push_docker_image(image_name='my-app', tag='v1.0.0')
+    push_docker_image(image_name='abhi20242024/my-app', tag='v1.0.0')
