@@ -1,7 +1,7 @@
 import docker
 import sys
 
-def build_docker_image(dockerfile_path='.', image_name='my-image', tag='latest'):
+def build_docker_image(dockerfile_path='.', image_name='abhi20242024/my-app', tag='v1.0.0'):
     try:
         client = docker.from_env()
 
@@ -32,8 +32,7 @@ def build_docker_image(dockerfile_path='.', image_name='my-image', tag='latest')
 
 if __name__ == "__main__":
     build_docker_image(
-        dockerfile_path='.',        # Path to Dockerfile
-        image_name='my-app',        # Image name
-        tag='v1.0.0'                # Image tag
+        dockerfile_path='.',                    # Path to Dockerfile
+        image_name='abhi20242024/my-app',       # 👈 Docker Hub namespace
+        tag='v1.0.0'                            # Image tag
     )
-
