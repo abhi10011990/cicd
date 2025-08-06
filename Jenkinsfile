@@ -4,7 +4,6 @@ pipeline {
     environment {
         IMAGE_NAME = 'my-app'
         IMAGE_TAG = 'v1.0.0'
-        VENV_PATH = 'venv'
     }
 
     stages {
@@ -17,8 +16,8 @@ pipeline {
         stage('Setup Python Environment') {
             steps {
                 sh '''
-                    python3 -m venv $VENV_PATH
-                    source $VENV_PATH/bin/activate
+                    python3 -m venv venv
+                    . venv/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -28,7 +27,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                    source $VENV_PATH/bin/activate
+                    . venv/bin/activate
                     pytest -v test_app.py
                 '''
             }
@@ -37,7 +36,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    source $VENV_PATH/bin/activate
+                    . venv/bin/activate
                     python docker_build.py
                 '''
             }
@@ -56,7 +55,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 sh '''
-                    source $VENV_PATH/bin/activate
+                    . venv/bin/activate
                     python docker_push.py
                 '''
             }
@@ -64,11 +63,11 @@ pipeline {
 
         stage('Deploy') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh '''
-                    source $VENV_PATH/bin/activate
+                    . venv/bin/activate
                     python deploy.py
                 '''
             }
@@ -77,10 +76,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Pipeline succeeded!'
+            echo "✅ Pipeline succeeded!"
         }
         failure {
-            echo '❌ Pipeline failed!'
+            echo "❌ Pipeline failed!"
         }
         always {
             cleanWs()
