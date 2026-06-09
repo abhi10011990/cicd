@@ -8,4 +8,4 @@ spec:
   - name: app
     image: abhi20242024/cicd:v1
     ports:
-    - containerPort: 80
+    - containerPort: 80 
