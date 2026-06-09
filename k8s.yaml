@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: cicd-app
-  namespace: cicd-test
+  namespace: cicd-test  
 spec:
   containers:
   - name: app
