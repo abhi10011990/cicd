@@ -49,8 +49,9 @@ jobs:
     - name: Configure kubeconfig
       run: |
         echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
-        export KUBECONFIG=kubeconfig
+        echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
 
     - name: Deploy to Kubernetes
       run: |
-        kubectl apply -f k8s.yaml
+        kubectl get nodes
+        kubectl apply -f k8s.yaml -n cicd-test
