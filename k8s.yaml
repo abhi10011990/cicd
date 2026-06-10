@@ -1,11 +1,20 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: cicd-app
-  namespace: cicd-test  
+  namespace: cicd-test
 spec:
-  containers:
-  - name: app
-    image: abhi20242024/cicd:v1
-    ports:
-    - containerPort: 80 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cicd-app
+  template:
+    metadata:
+      labels:
+        app: cicd-app
+    spec:
+      containers:
+        - name: app
+          image: abhi20242024/cicd:latest
+          ports:
+            - containerPort: 80
